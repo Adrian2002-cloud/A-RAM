@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-RAM | Servicio Técnico de Computadoras — Palmira, Valle del Cauca</title>
+<meta name="description" content="Servicio técnico profesional de computadoras en Palmira. Formateo, reparación, mantenimiento, armado de PC y marketplace. A-RAM — rápido, confiable, garantizado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & TOKENS ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --c:#00e5ff;--o:#ff6b2b;
+  --cg:rgba(0,229,255,.18);--cg2:rgba(0,229,255,.08);
+  --og:rgba(255,107,43,.18);
+  --bg:#07070f;--bg1:#0c0c1a;--bg2:#10101f;
+  --tx:#dde0f0;--tm:#6c6e8a;
+  --bd:rgba(255,255,255,.07);--bdc:rgba(0,229,255,.25);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;cursor:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--c);border-radius:2px}
+h1,h2,h3,h4{font-family:'Syne',sans-serif}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ===== CUSTOM CURSOR ===== */
+#cur{width:9px;height:9px;background:var(--c);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 12px var(--c),0 0 24px var(--cg);transition:transform .15s,width .2s,height .2s}
+#cur-r{width:34px;height:34px;border:1.5px solid rgba(0,229,255,.35);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .2s,border-color .2s}
+body.hovered #cur{transform:translate(-50%,-50%) scale(1.9)}
+body.hovered #cur-r{transform:translate(-50%,-50%) scale(1.6);border-color:var(--c)}
+
+/* ===== KEYFRAMES ===== */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 8px var(--c)}50%{box-shadow:0 0 28px var(--c),0 0 50px var(--cg)}}
+@keyframes ripple{to{transform:scale(4);opacity:0}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes glitch1{0%,39%,41%,100%{transform:none;clip-path:none}40%{clip-path:polygon(0 18%,100% 18%,100% 22%,0 22%);transform:translate(-3px,0)}}
+@keyframes glitch2{0%,59%,61%,100%{transform:none;clip-path:none;opacity:0}60%{clip-path:polygon(0 55%,100% 55%,100% 60%,0 60%);transform:translate(3px,0);opacity:.7}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lineFill{from{width:0}to{width:100%}}
+
+/* ===== FADE-IN ON SCROLL ===== */
+.fi{opacity:0;transform:translateY(38px);transition:opacity .7s ease,transform .7s ease}
+.fi.on{opacity:1;transform:none}
+
+/* ===== NAVBAR ===== */
+#nav{position:fixed;inset:0 0 auto 0;z-index:800;padding:22px 44px;display:flex;align-items:center;justify-content:space-between;transition:padding .4s,background .4s,border-color .4s;border-bottom:1px solid transparent}
+#nav.s{padding:14px 44px;background:rgba(7,7,15,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-color:var(--bd)}
+.logo{font-family:'Syne',sans-serif;font-size:1.65rem;font-weight:800;color:var(--c);position:relative;letter-spacing:.04em}
+.logo::before{content:'A-RAM';position:absolute;inset:0;color:var(--o);animation:glitch1 5s infinite 1.5s}
+.logo::after{content:'A-RAM';position:absolute;inset:0;color:var(--c);animation:glitch2 5s infinite 1.6s}
+.nav-ul{display:flex;align-items:center;gap:34px;list-style:none}
+.nav-ul a{font-size:.875rem;font-weight:500;color:var(--tm);transition:color .25s;position:relative}
+.nav-ul a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--c);transition:width .3s}
+.nav-ul a:hover{color:var(--c)}
+.nav-ul a:hover::after{width:100%}
+.nav-cta{background:var(--c)!important;color:#07070f!important;padding:9px 20px;border-radius:8px;font-weight:700!important;overflow:hidden;position:relative}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:translateX(-100%);transition:transform .5s}
+.nav-cta:hover::before{transform:translateX(100%)}
+.nav-cta::after{display:none}
+.nav-cta:hover{background:#00ccee!important;box-shadow:0 0 28px var(--cg)!important}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;cursor:none}
+.burger span{display:block;width:24px;height:2px;background:var(--tx);border-radius:2px;transition:.3s}
+.mob-menu{display:none;flex-direction:column;gap:0;position:fixed;top:64px;inset-x:0;background:rgba(7,7,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);z-index:799;padding:8px 0 20px}
+.mob-menu.open{display:flex}
+.mob-menu a{padding:14px 28px;font-size:.95rem;color:var(--tm);border-bottom:1px solid var(--bd);transition:color .25s}
+.mob-menu a:hover{color:var(--c)}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 26px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;cursor:none;border:none;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s,background .25s,border-color .25s,color .25s;white-space:nowrap}
+.btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-100%);transition:transform .5s}
+.btn:hover::before{transform:translateX(100%)}
+.btn-p{background:var(--c);color:#07070f}
+.btn-p:hover{background:#00d4ec;box-shadow:0 0 32px var(--cg),0 8px 24px rgba(0,229,255,.28);transform:translateY(-2px)}
+.btn-ol{background:transparent;color:var(--tx);border:1.5px solid var(--bd)}
+.btn-ol:hover{border-color:var(--c);color:var(--c);background:var(--cg2);transform:translateY(-2px)}
+.btn-or{background:var(--o);color:#fff}
+.btn-or:hover{background:#e85c22;box-shadow:0 0 32px var(--og),0 8px 24px rgba(255,107,43,.25);transform:translateY(-2px)}
+.btn-sm{padding:10px 18px;font-size:.855rem;border-radius:8px;width:100%;justify-content:center}
+.rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.32);transform:scale(0);animation:ripple .6s linear;pointer-events:none}
+
+/* ===== SECTION COMMON ===== */
+section{padding:100px 40px}
+.wrap{max-width:1180px;margin:0 auto}
+.s-tag{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--c);background:var(--cg2);border:1px solid var(--bdc);padding:6px 16px;border-radius:100px;margin-bottom:18px}
+.s-ttl{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;line-height:1.12;margin-bottom:14px}
+.s-sub{font-size:1rem;color:var(--tm);line-height:1.75;max-width:520px}
+.sec-hd{text-align:center;margin-bottom:64px}
+.sec-hd .s-sub{margin:0 auto}
+.hl{color:var(--c)}
+.hlo{color:var(--o)}
+
+/* ===== HERO ===== */
+#hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+#pcv{position:absolute;inset:0;z-index:0}
+.hero-in{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:120px 40px 80px;width:100%;display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:9px;background:var(--cg2);border:1px solid var(--bdc);border-radius:100px;padding:7px 17px;font-size:.78rem;font-weight:600;color:var(--c);margin-bottom:26px;animation:fadeUp .8s ease both}
+.bdot{width:7px;height:7px;background:var(--c);border-radius:50%;animation:pulse 2s ease infinite}
+.hero-ttl{font-size:clamp(2.8rem,5.5vw,4.8rem);font-weight:800;line-height:1.1;margin-bottom:14px;animation:fadeUp .8s ease .1s both}
+.tw-wrap{display:flex;align-items:center;gap:3px;min-height:1.2em}
+#tw{color:var(--c)}
+.tw-cur{display:inline-block;width:3px;height:.9em;background:var(--c);animation:blink .75s step-end infinite;vertical-align:text-top;margin-left:2px}
+.hero-desc{font-size:1.05rem;color:var(--tm);line-height:1.75;max-width:520px;margin-bottom:38px;animation:fadeUp .8s ease .2s both}
+.hero-acts{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .8s ease .3s both}
+
+/* stats card */
+.stats-wrap{animation:fadeUp .8s ease .45s both}
+.stats-card{background:rgba(12,12,26,.88);border:1px solid var(--bdc);border-radius:20px;padding:34px 30px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);min-width:230px;animation:float 6s ease-in-out infinite .5s;position:relative}
+.stats-card::before{content:'';position:absolute;inset:-1px;border-radius:20px;background:linear-gradient(135deg,rgba(0,229,255,.35),transparent 55%,rgba(255,107,43,.2));z-index:-1}
+.stat{margin-bottom:22px}
+.stat:last-child{margin-bottom:0}
+.stat-n{font-family:'Syne',sans-serif;font-size:2.3rem;font-weight:800;color:var(--c);line-height:1;margin-bottom:3px}
+.stat-l{font-size:.8rem;color:var(--tm);font-weight:500}
+.stat-div{width:100%;height:1px;background:var(--bd);margin:18px 0}
+
+/* ===== SERVICES ===== */
+#services{background:linear-gradient(180deg,var(--bg) 0%,var(--bg1) 50%,var(--bg) 100%)}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.srv-card{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:30px 26px;position:relative;overflow:hidden;transition:transform .35s,box-shadow .35s,background .35s}
+.srv-glow{position:absolute;top:-60px;right:-60px;width:150px;height:150px;background:var(--c);border-radius:50%;filter:blur(55px);opacity:0;transition:opacity .35s}
+.srv-card:hover{transform:translateY(-7px);background:rgba(14,14,28,.97);box-shadow:0 0 0 1.5px var(--c),0 0 50px var(--cg),0 24px 60px rgba(0,0,0,.45)}
+.srv-card:hover .srv-glow{opacity:.22}
+.srv-ico{width:50px;height:50px;background:var(--cg2);border:1px solid var(--bdc);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:18px;transition:background .3s,box-shadow .3s}
+.srv-card:hover .srv-ico{background:rgba(0,229,255,.22);box-shadow:0 0 18px var(--cg)}
+.srv-name{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:9px}
+.srv-desc{font-size:.855rem;color:var(--tm);line-height:1.65;margin-bottom:14px}
+.srv-tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:100px;background:var(--cg2);color:var(--c);border:1px solid var(--bdc)}
+
+/* ===== HOW IT WORKS ===== */
+#how{background:var(--bg)}
+.steps-outer{position:relative}
+.step-line{position:absolute;top:39px;left:calc(12.5% + 18px);right:calc(12.5% + 18px);height:2px;background:var(--bd);z-index:0}
+.step-fill{height:100%;width:0;background:linear-gradient(90deg,var(--c),var(--o));transition:width 2.2s cubic-bezier(.4,0,.2,1);border-radius:2px}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 18px;position:relative;z-index:1}
+.step-num{width:78px;height:78px;border-radius:50%;background:var(--bg2);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:1.7rem;margin-bottom:22px;transition:border-color .5s,background .5s,box-shadow .5s}
+.step.act .step-num{background:var(--cg2);border-color:var(--c);box-shadow:0 0 28px var(--cg)}
+.step-ttl{font-family:'Syne',sans-serif;font-size:.98rem;font-weight:700;margin-bottom:9px}
+.step-desc{font-size:.83rem;color:var(--tm);line-height:1.65}
+
+/* ===== MARKETPLACE ===== */
+#market{background:linear-gradient(180deg,var(--bg) 0%,var(--bg1) 50%,var(--bg) 100%)}
+.mkt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.pcard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s}
+.pcard:hover{transform:translateY(-7px);border-color:var(--bdc);box-shadow:0 0 40px var(--cg2),0 24px 60px rgba(0,0,0,.4)}
+.pimg{width:100%;height:175px;background:linear-gradient(135deg,#0c1624,#080f1a);display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative;overflow:hidden}
+.pimg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,var(--bg2) 100%)}
+.pbadge{position:absolute;top:13px;left:13px;font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;padding:4px 11px;border-radius:100px;z-index:1}
+.used{background:rgba(255,107,43,.18);color:var(--o);border:1px solid rgba(255,107,43,.3)}
+.nuevo{background:var(--cg2);color:var(--c);border:1px solid var(--bdc)}
+.armada{background:rgba(120,80,255,.18);color:#a88fff;border:1px solid rgba(120,80,255,.3)}
+.pinfo{padding:18px 22px 22px}
+.pcat{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin-bottom:7px}
+.pname{font-family:'Syne',sans-serif;font-size:.98rem;font-weight:700;margin-bottom:7px}
+.pspecs{font-size:.81rem;color:var(--tm);line-height:1.6;margin-bottom:14px}
+.pprice{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--c);margin-bottom:14px}
+.pprice span{font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--tm);font-weight:400}
+
+/* ===== CONTACT ===== */
+#contact{background:var(--bg)}
+.cnt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:38px}
+.ccard{background:var(--bg2);border:1px solid var(--bd);border-radius:16px;padding:30px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;transition:transform .35s,border-color .35s,box-shadow .35s,background .35s}
+.ccard:hover{transform:translateY(-7px);border-color:var(--c);background:rgba(0,229,255,.03);box-shadow:0 0 40px var(--cg2),0 20px 50px rgba(0,0,0,.3)}
+.cico{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.55rem;background:var(--cg2);border:1px solid var(--bdc)}
+.clbl{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.cval{font-family:'Syne',sans-serif;font-size:.98rem;font-weight:700}
+.cdesc{font-size:.81rem;color:var(--tm)}
+.cta-box{background:linear-gradient(135deg,var(--bg2),rgba(0,229,255,.04));border:1px solid var(--bdc);border-radius:20px;padding:60px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-120px;right:-120px;width:300px;height:300px;background:var(--cg);border-radius:50%;filter:blur(80px);opacity:.12}
+.cta-box::after{content:'';position:absolute;bottom:-100px;left:-100px;width:260px;height:260px;background:var(--og);border-radius:50%;filter:blur(80px);opacity:.09}
+.cta-in{position:relative;z-index:1}
+
+/* ===== FOOTER ===== */
+footer{background:var(--bg1);border-top:1px solid var(--bd);padding:38px 40px}
+.foot-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px}
+.foot-logo{font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--c)}
+.foot-txt{font-size:.83rem;color:var(--tm);text-align:center;line-height:1.65}
+.foot-links{display:flex;gap:18px}
+.foot-links a{font-size:.83rem;color:var(--tm);transition:color .25s}
+.foot-links a:hover{color:var(--c)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .srv-grid,.mkt-grid{grid-template-columns:repeat(2,1fr)}
+  .steps-grid{grid-template-columns:repeat(2,1fr);gap:40px}
+  .step-line{display:none}
+  .hero-in{grid-template-columns:1fr}
+  .stats-card{display:flex;gap:36px;justify-content:center}
+  .stat-div{display:none}
+  .stat{margin-bottom:0}
+}
+@media(max-width:768px){
+  #nav,#nav.s{padding:15px 20px}
+  .nav-ul{display:none}
+  .burger{display:flex}
+  section{padding:80px 20px}
+  .hero-in{padding:108px 20px 60px}
+  .srv-grid,.mkt-grid,.cnt-grid{grid-template-columns:1fr}
+  .stats-card{flex-direction:column;gap:20px}
+  .stat-div{display:block}
+  .stat{margin-bottom:0}
+  .steps-grid{grid-template-columns:1fr;gap:36px}
+  footer{padding:28px 20px}
+  .foot-in{flex-direction:column;text-align:center}
+  .cta-box{padding:40px 22px}
+  .hero-acts{gap:12px}
+}
+@media(max-width:480px){
+  .btn{padding:12px 20px;font-size:.875rem}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="nav">
+  <a href="#" class="logo">A-RAM</a>
+  <ul class="nav-ul">
+    <li><a href="#services">Servicios</a></li>
+    <li><a href="#how">Proceso</a></li>
+    <li><a href="#market">Marketplace</a></li>
+    <li><a href="#contact">Contacto</a></li>
+    <li><a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20necesito%20un%20servicio%20t%C3%A9cnico" target="_blank" class="nav-cta">WhatsApp ↗</a></li>
+  </ul>
+  <button class="burger" id="burg" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob-menu" id="mob">
+  <a href="#services" onclick="closeMob()">Servicios</a>
+  <a href="#how" onclick="closeMob()">Cómo funciona</a>
+  <a href="#market" onclick="closeMob()">Marketplace</a>
+  <a href="#contact" onclick="closeMob()">Contacto</a>
+  <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20necesito%20un%20servicio%20t%C3%A9cnico" target="_blank">WhatsApp ↗</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <canvas id="pcv"></canvas>
+  <div class="hero-in">
+    <div>
+      <div class="hero-badge"><span class="bdot"></span>Palmira, Valle del Cauca · Disponible ahora</div>
+      <h1 class="hero-ttl">
+        Tu equipo merece<br>
+        <span class="tw-wrap"><span id="tw"></span><span class="tw-cur"></span></span>
+      </h1>
+      <p class="hero-desc">Servicio técnico profesional de computadoras en Palmira. Reparación, formateo, mantenimiento y armado de PC a medida. Rápido, confiable y con garantía.</p>
+      <div class="hero-acts">
+        <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20quiero%20agendar%20un%20servicio" target="_blank" class="btn btn-p">💬 Escríbeme ahora</a>
+        <a href="#services" class="btn btn-ol">Ver servicios →</a>
+      </div>
+    </div>
+    <div class="stats-wrap">
+      <div class="stats-card">
+        <div class="stat">
+          <div class="stat-n" data-t="500" data-s="+">0</div>
+          <div class="stat-l">Equipos reparados</div>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <div class="stat-n" data-t="3" data-s="+">0</div>
+          <div class="stat-l">Años de experiencia</div>
+        </div>
+        <div class="stat-div"></div>
+        <div class="stat">
+          <div class="stat-n" data-t="98" data-s="%">0</div>
+          <div class="stat-l">Clientes satisfechos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-hd fi">
+      <div class="s-tag">⚙️ Servicios</div>
+      <h2 class="s-ttl">Todo lo que tu equipo <span class="hl">necesita</span></h2>
+      <p class="s-sub">Desde un formateo express hasta la construcción de tu PC ideal desde cero. A domicilio, con recogida o en tu hogar.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">🖥️</div>
+        <h3 class="srv-name">Formateo e instalación de Windows</h3>
+        <p class="srv-desc">Reinstalación limpia del sistema operativo, controladores y programas esenciales. Tu PC como nueva en pocas horas.</p>
+        <span class="srv-tag">Express</span>
+      </div>
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">🛡️</div>
+        <h3 class="srv-name">Limpieza de virus y optimización</h3>
+        <p class="srv-desc">Eliminación completa de malware, spyware y bloatware. Tu equipo de vuelta a su máximo rendimiento.</p>
+        <span class="srv-tag">Seguridad</span>
+      </div>
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">🔧</div>
+        <h3 class="srv-name">Mantenimiento físico</h3>
+        <p class="srv-desc">Limpieza interna, cambio de pasta térmica y diagnóstico completo. Recojo tu equipo y te lo devuelvo listo.</p>
+        <span class="srv-tag">A domicilio</span>
+      </div>
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">🏠</div>
+        <h3 class="srv-name">Reparación de errores a domicilio</h3>
+        <p class="srv-desc">Me desplazo hasta tu hogar o negocio para diagnosticar y solucionar errores de sistema o hardware sin mover tu equipo.</p>
+        <span class="srv-tag">Domicilio</span>
+      </div>
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">⚡</div>
+        <h3 class="srv-name">Armado de PC desde cero</h3>
+        <p class="srv-desc">Diseño y ensamblaje de PCs de alto rendimiento a medida. Gaming, trabajo, diseño o servidor. Con o sin componentes del cliente.</p>
+        <span class="srv-tag">Premium</span>
+      </div>
+      <div class="srv-card fi">
+        <div class="srv-glow"></div>
+        <div class="srv-ico">📦</div>
+        <h3 class="srv-name">Instalación de programas</h3>
+        <p class="srv-desc">Office, Adobe Creative Suite, drivers, antivirus y todo el software que necesites, correctamente configurado y listo para usar.</p>
+        <span class="srv-tag">Software</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-hd fi">
+      <div class="s-tag">📋 Proceso</div>
+      <h2 class="s-ttl">¿Cómo <span class="hl">funciona</span>?</h2>
+      <p class="s-sub">Proceso simple, transparente y sin sorpresas. Del primer mensaje al equipo funcionando perfecto.</p>
+    </div>
+    <div class="steps-outer">
+      <div class="step-line"><div class="step-fill" id="sfill"></div></div>
+      <div class="steps-grid" id="sgrid">
+        <div class="step fi">
+          <div class="step-num">💬</div>
+          <h4 class="step-ttl">1. Contacto inicial</h4>
+          <p class="step-desc">Escríbeme por WhatsApp describiendo el problema. Te respondo rápido con orientación inicial.</p>
+        </div>
+        <div class="step fi">
+          <div class="step-num">🔍</div>
+          <h4 class="step-ttl">2. Diagnóstico</h4>
+          <p class="step-desc">Evalúo el problema y te doy un presupuesto claro antes de empezar. Sin sorpresas al final.</p>
+        </div>
+        <div class="step fi">
+          <div class="step-num">🔩</div>
+          <h4 class="step-ttl">3. Reparación</h4>
+          <p class="step-desc">Ejecuto el servicio en tu domicilio o me llevo el equipo y lo regreso al día siguiente.</p>
+        </div>
+        <div class="step fi">
+          <div class="step-num">✅</div>
+          <h4 class="step-ttl">4. Entrega y garantía</h4>
+          <p class="step-desc">Recibe tu equipo funcionando perfecto con garantía sobre el servicio realizado.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MARKETPLACE ===== -->
+<section id="market">
+  <div class="wrap">
+    <div class="sec-hd fi">
+      <div class="s-tag">🛒 Marketplace</div>
+      <h2 class="s-ttl">Equipos y componentes <span class="hl">disponibles</span></h2>
+      <p class="s-sub">Laptops, PCs armadas y componentes seleccionados. Todo revisado y garantizado. Consulta disponibilidad por WhatsApp.</p>
+    </div>
+    <div class="mkt-grid">
+      <!-- Producto 1 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#0c1a2e,#07101e)">
+          💻<div class="pbadge used">Usado</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">Laptop</div>
+          <h3 class="pname">Laptop Core i5 8va Gen</h3>
+          <p class="pspecs">Intel Core i5-8250U · 8GB RAM DDR4<br>SSD 256GB · 15.6" Full HD · Win 11</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20la%20laptop%20Core%20i5%208va%20Gen" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+      <!-- Producto 2 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#12082a,#0a0518)">
+          🖥️<div class="pbadge armada">Armada</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">PC de escritorio</div>
+          <h3 class="pname">PC Gaming Ryzen 5</h3>
+          <p class="pspecs">AMD Ryzen 5 5600G · 16GB RAM DDR4<br>SSD 480GB · RX 6600 · Gabinete ATX</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20la%20PC%20Gaming%20Ryzen%205" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+      <!-- Producto 3 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#071a14,#040f0a)">
+          💾<div class="pbadge nuevo">Nuevo</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">Componentes</div>
+          <h3 class="pname">Kit RAM 16GB DDR4</h3>
+          <p class="pspecs">2×8GB DDR4 3200MHz · XMP 2.0<br>Compatible AMD e Intel · CL16</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20el%20Kit%20RAM%2016GB%20DDR4" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+      <!-- Producto 4 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#1a1408,#0f0b04)">
+          📺<div class="pbadge used">Usado</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">Periférico</div>
+          <h3 class="pname">Monitor 24" Full HD</h3>
+          <p class="pspecs">1920×1080 · 75Hz · IPS Panel<br>HDMI + VGA · Sin marco</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20el%20Monitor%2024%22%20Full%20HD" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+      <!-- Producto 5 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#0e1a0e,#070f07)">
+          🎮<div class="pbadge used">Usado</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">GPU</div>
+          <h3 class="pname">GPU RX 580 8GB</h3>
+          <p class="pspecs">8GB GDDR5 · 256-bit · 2304 shaders<br>HDMI + DisplayPort · Testada</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20la%20GPU%20RX%20580%208GB" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+      <!-- Producto 6 -->
+      <div class="pcard fi">
+        <div class="pimg" style="background:linear-gradient(135deg,#1a0d24,#0e0814)">
+          ⌨️<div class="pbadge nuevo">Nuevo</div>
+        </div>
+        <div class="pinfo">
+          <div class="pcat">Periférico</div>
+          <h3 class="pname">Combo Teclado + Mouse Gaming</h3>
+          <p class="pspecs">Teclado mecánico RGB + Mouse 6400 DPI<br>USB · Compatible Win/Mac</p>
+          <div class="pprice">Consultar <span>precio</span></div>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20me%20interesa%20el%20Combo%20Teclado%20%2B%20Mouse%20Gaming" target="_blank" class="btn btn-p btn-sm">💬 Consultar precio</a>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:46px" class="fi">
+      <p style="color:var(--tm);margin-bottom:18px;font-size:.95rem">¿Buscas algo específico que no ves aquí? Consúltame directamente.</p>
+      <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20busco%20un%20componente%20espec%C3%ADfico" target="_blank" class="btn btn-ol">📩 Preguntar por otro equipo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-hd fi">
+      <div class="s-tag">📞 Contacto</div>
+      <h2 class="s-ttl">¿Listo para empezar? <span class="hl">Hablemos</span></h2>
+      <p class="s-sub">Estoy disponible para resolver tus dudas y atender tu equipo. Elige el canal que prefieras.</p>
+    </div>
+    <div class="cnt-grid">
+      <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20necesito%20un%20servicio%20t%C3%A9cnico" target="_blank" class="ccard fi">
+        <div class="cico">📱</div>
+        <div class="clbl">WhatsApp</div>
+        <div class="cval">+57 321 567 7125</div>
+        <div class="cdesc">Respuesta rápida · Atención inmediata</div>
+      </a>
+      <a href="https://instagram.com/aramirez11_" target="_blank" class="ccard fi">
+        <div class="cico">📸</div>
+        <div class="clbl">Instagram</div>
+        <div class="cval">@aramirez11_</div>
+        <div class="cdesc">Proyectos, trabajos y novedades</div>
+      </a>
+      <a href="mailto:adrian75883@gmail.com" class="ccard fi">
+        <div class="cico">✉️</div>
+        <div class="clbl">Correo electrónico</div>
+        <div class="cval">adrian75883@gmail.com</div>
+        <div class="cdesc">Para cotizaciones formales y empresas</div>
+      </a>
+    </div>
+    <div class="cta-box fi">
+      <div class="cta-in">
+        <div class="s-tag" style="justify-content:center">🚀 Acción inmediata</div>
+        <h3 class="s-ttl" style="margin-bottom:10px">Tu PC tiene un problema<br><span class="hl">y lo voy a solucionar</span></h3>
+        <p style="color:var(--tm);margin-bottom:30px;font-size:.98rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.75">Sin vueltas. Sin esperas eternas. Servicio directo, precio justo y trabajo garantizado en Palmira, Valle del Cauca.</p>
+        <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20quiero%20agendar%20un%20servicio%20t%C3%A9cnico" target="_blank" class="btn btn-p">💬 Agendar servicio ahora</a>
+          <a href="https://wa.me/573215677125?text=Hola%20A-RAM%2C%20quisiera%20una%20cotizaci%C3%B3n" target="_blank" class="btn btn-or">💰 Pedir cotización</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="foot-in">
+    <div class="foot-logo">A-RAM</div>
+    <div class="foot-txt">
+      © 2025 A-RAM · Servicio técnico de computadoras<br>
+      <span style="font-size:.76rem">Palmira, Valle del Cauca, Colombia</span>
+    </div>
+    <div class="foot-links">
+      <a href="https://wa.me/573215677125" target="_blank">WhatsApp</a>
+      <a href="https://instagram.com/aramirez11_" target="_blank">Instagram</a>
+      <a href="mailto:adrian75883@gmail.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== CURSOR ===== */
+const cur=document.getElementById('cur'),curR=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+(function anim(){rx+=(mx-rx)*.13;ry+=(my-ry)*.13;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.srv-card,.pcard,.ccard').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovered'));
+});
+
+/* ===== NAVBAR SCROLL ===== */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('s',window.scrollY>50),{passive:true});
+
+/* ===== HAMBURGER ===== */
+const burg=document.getElementById('burg'),mob=document.getElementById('mob');
+burg.addEventListener('click',()=>mob.classList.toggle('open'));
+function closeMob(){mob.classList.remove('open')}
+
+/* ===== SMOOTH SCROLL ===== */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'})}
+  });
+});
+
+/* ===== PARTICLES ===== */
+const cv=document.getElementById('pcv'),cx=cv.getContext('2d');
+function resize(){cv.width=window.innerWidth;cv.height=window.innerHeight}
+resize();window.addEventListener('resize',resize,{passive:true});
+const N=75,D=125;
+const pts=Array.from({length:N},()=>({
+  x:Math.random()*cv.width,y:Math.random()*cv.height,
+  vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.45,
+  r:Math.random()*1.8+.8,a:Math.random()*.4+.15
+}));
+let pmx=-9999,pmy=-9999;
+document.getElementById('hero').addEventListener('mousemove',e=>{pmx=e.clientX;pmy=e.clientY},{passive:true});
+function drawP(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>cv.width)p.vx*=-1;
+    if(p.y<0||p.y>cv.height)p.vy*=-1;
+    cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.fillStyle=`rgba(0,229,255,${p.a})`;cx.fill();
+  });
+  for(let i=0;i<N;i++){
+    for(let j=i+1;j<N;j++){
+      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<D){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.strokeStyle=`rgba(0,229,255,${(1-d/D)*.25})`;cx.lineWidth=.5;cx.stroke()}
+    }
+    const dx=pts[i].x-pmx,dy=pts[i].y-pmy,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<160){cx.beginPath();cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pmx,pmy);cx.strokeStyle=`rgba(0,229,255,${(1-d/160)*.55})`;cx.lineWidth=1;cx.stroke()}
+  }
+  requestAnimationFrame(drawP);
+}
+drawP();
+
+/* ===== TYPEWRITER ===== */
+const phrases=['el mejor servicio','formateo express','PC armada a medida','virus eliminados','máximo rendimiento','expertos a domicilio'];
+let pi=0,ci=0,del=false;
+const tw=document.getElementById('tw');
+function type(){
+  const cur=phrases[pi];
+  tw.textContent=del?cur.slice(0,ci-1):cur.slice(0,ci+1);
+  del?ci--:ci++;
+  let t=del?55:95;
+  if(!del&&ci===cur.length){t=2100;del=true}
+  else if(del&&ci===0){del=false;pi=(pi+1)%phrases.length;t=280}
+  setTimeout(type,t);
+}
+type();
+
+/* ===== INTERSECTION OBSERVER (fade-in) ===== */
+const fiEls=document.querySelectorAll('.fi');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('on'),+(e.target.dataset.d||0));
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+fiEls.forEach((el,i)=>{
+  const peers=[...el.parentElement.querySelectorAll('.fi')];
+  el.dataset.d=peers.indexOf(el)*85;
+  io.observe(el);
+});
+
+/* ===== COUNTERS ===== */
+document.querySelectorAll('.stat-n[data-t]').forEach(el=>{
+  new IntersectionObserver(([e])=>{
+    if(!e.isIntersecting)return;
+    const tgt=+el.dataset.t,suf=el.dataset.s||'';
+    let v=0;const step=tgt/110;
+    const id=setInterval(()=>{v+=step;if(v>=tgt){v=tgt;clearInterval(id)}el.textContent=Math.floor(v)+suf},16);
+  },{threshold:.6}).observe(el);
+});
+
+/* ===== STEP PROGRESS ===== */
+const sgrid=document.getElementById('sgrid'),sfill=document.getElementById('sfill');
+if(sgrid&&sfill){
+  new IntersectionObserver(([e])=>{
+    if(!e.isIntersecting)return;
+    sfill.style.width='100%';
+    sgrid.querySelectorAll('.step').forEach((s,i)=>setTimeout(()=>s.classList.add('act'),i*500));
+  },{threshold:.35}).observe(sgrid);
+}
+
+/* ===== RIPPLE ===== */
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const r=document.createElement('span'),rect=this.getBoundingClientRect();
+    const sz=Math.max(rect.width,rect.height);
+    r.className='rip';r.style.cssText=`width:${sz}px;height:${sz}px;left:${e.clientX-rect.left-sz/2}px;top:${e.clientY-rect.top-sz/2}px`;
+    this.appendChild(r);setTimeout(()=>r.remove(),620);
+  });
+});
+</script>
+</body>
+</html>
